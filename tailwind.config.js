@@ -5,11 +5,11 @@ export default {
         extend: {
             colors: {
                 "viat-text": "#0D0E10",
-                "viat-bg": "#F1F4FA",
-                "viat-primary": "#2D3648",
+                "viat-bg": "#516778",
+                "viat-primary": "#8198C6",
                 "viat-secondary": "#A9B5CC",
-                "viat-accent": "#8198C6",
-                "viat-bg-shade": "#E7EDFA"
+                "viat-accent": "#155eef",
+                "viat-wh": "#FFFFFF",
             },
             fontFamily: {
                 "viat-title": ["Inter", "sans-serif"],
@@ -17,7 +17,7 @@ export default {
                 "viat-small": ["Montserrat", "sans-serif"]
             },
             fontSize: {
-                "viat-size-title": "32px",
+                "viat-size-title": "12px",
                 "viat-size-body": "16px",
                 "viat-size-small": "12px"
             }

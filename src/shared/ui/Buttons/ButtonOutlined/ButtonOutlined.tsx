@@ -11,7 +11,7 @@ export const ButtonOutlined = ({
        handleClick
 }: ButtonOutlinedProps) => {return (
     <button
-        className='border-2 border-viat-primary text-viat-primary font-viat-body font-bold py-2 px-4 rounded-md'
+        className='text-viat-accent font-viat-body font-bold py-2 px-4 rounded-md'
         disabled={disabled}
         onClick={handleClick}
     >

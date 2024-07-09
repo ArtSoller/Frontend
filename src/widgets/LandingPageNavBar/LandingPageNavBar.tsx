@@ -4,7 +4,7 @@ import { SignInButton } from "../../features/SignInButton"
 // TODO: Do something with it.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
-import Logo from "../../shared/media/Screenshot1.svg"
+import Logo from "../../shared/media/Logo.svg"
 
 export const LandingPageNavBar = () => {
     const linkClasses: string =
@@ -14,7 +14,7 @@ export const LandingPageNavBar = () => {
             <div className='container mx-auto px-24 h-full'>
                 <div className='flex items-center justify-between h-full'>
                     <div className='flex items-center'>
-                        <img src="../../shared/media/Screenshot1.svg" alt='Viatorus Logo' className='h-10 w-auto' />
+                        <img src="src/shared/media/Logo.svg" alt='Capital Compass Logo' className='h-10 w-auto' />
                     </div>
                     <nav className='flex space-x-8'>
                         {/*TODO: Make actual links*/}
@@ -29,12 +29,11 @@ export const LandingPageNavBar = () => {
                         </a>
                     </nav>
                     <div className='flex space-x-4'>
-                        <SignInButton />
                         <SignUpButton />
+                        <SignInButton />
                     </div>
                 </div>
             </div>
-            <div className='absolute bottom-0 left-0 right-0 border-b-2 border-viat-primary'></div>
         </header>
     )
 }
