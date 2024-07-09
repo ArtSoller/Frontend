@@ -1,6 +1,9 @@
 import axios, { AxiosError } from "axios"
-// import { logger } from "../logging-service"
 import { toast } from "react-toastify"
+import config from "../../../app/config.json"
+
+axios.defaults.baseURL = config.apiEndpoint
+
 axios.interceptors.response.use(
     res => res,
     function (error: AxiosError) {
