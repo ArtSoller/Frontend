@@ -12,7 +12,8 @@ import { closeModal } from "../../features/SignInButton/model/SignInModalSlice.t
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import Logo from "../../shared/media/Logo.svg"
-
+import { toast } from "react-toastify"
+import { httpService } from "../../shared/services/http-service"
 interface formData {
     email: string
     password: string
@@ -62,7 +63,34 @@ export const SignInModal = () => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        console.log(data)
+        const { email, password } = data
+        const payload = { email, password }
+        const toastId = toast.loading("Please wait patiently...", {
+            position: "top-center"
+        })
+
+        httpService
+            .post("http://localhost:8080/api/version1/login", { payload })
+            .then(res => {
+                console.log(res.data)
+                toast.update(toastId, {
+                    render: "Successfully!",
+                    position: "top-center",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 3000
+                })
+            })
+            .catch(error => {
+                console.error("Error during login:", error)
+                toast.update(toastId, {
+                    render: "Error during login",
+                    position: "top-center",
+                    type: "error",
+                    isLoading: false,
+                    autoClose: 3000
+                })
+            })
     }
 
     useEffect(() => {

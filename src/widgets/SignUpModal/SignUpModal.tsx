@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { boolean, object, ref, string, ValidationError } from "yup"
+import { toast } from "react-toastify"
 
 import { ButtonContained } from "../../shared/ui/Buttons/ButtonContained"
 import { InputField } from "../../shared/ui/InputField"
@@ -8,6 +9,7 @@ import { CheckField } from "../../shared/ui/CheckField"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../app/store/store.ts"
 import { closeModal } from "../../features/SignUpButton/model/SignUpModalSlice.ts"
+import { httpService } from "../../shared/services/http-service"
 
 // TODO: Do something with it.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -74,7 +76,34 @@ export const SignUpModal = () => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
-        console.log(data)
+        const { username, email, password } = data
+        const payload = { username, email, password }
+        const toastId = toast.loading("Please wait patiently...", {
+            position: "top-center"
+        })
+
+        httpService
+            .post("http://localhost:8080/api/version1/registration", { payload })
+            .then(res => {
+                console.log(res.data)
+                toast.update(toastId, {
+                    render: "Successfully!",
+                    position: "top-center",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 3000
+                })
+            })
+            .catch(error => {
+                console.error("Error during registration:", error)
+                toast.update(toastId, {
+                    render: "Error during registration",
+                    position: "top-center",
+                    type: "error",
+                    isLoading: false,
+                    autoClose: 3000
+                })
+            })
     }
 
     useEffect(() => {
