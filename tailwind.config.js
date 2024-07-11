@@ -20,6 +20,10 @@ export default {
                 "viat-size-title": "12px",
                 "viat-size-body": "16px",
                 "viat-size-small": "12px"
+            },
+            backgroundImage: {
+                "viat-primary-shade":
+                    "linear-gradient(to right, #2D3648 0%, #6D82AE 100%)"
             }
         }
     },
