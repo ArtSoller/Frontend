@@ -14,7 +14,6 @@ axios.interceptors.response.use(
 
         if (!expectedErrors) {
             toast("Unexpected Error")
-            // logger.log(error)
         }
         return Promise.reject(error)
     }
