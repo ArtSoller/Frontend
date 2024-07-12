@@ -62,6 +62,7 @@ export const SignInModal = () => {
                     isLoading: false,
                     autoClose: 3000
                 })
+                navigate("workspace")
             })
             .catch(error => {
                 console.error("Error during login:", error)
@@ -72,7 +73,6 @@ export const SignInModal = () => {
                     isLoading: false,
                     autoClose: 3000
                 })
-                navigate("workspace")
             })
     }
 

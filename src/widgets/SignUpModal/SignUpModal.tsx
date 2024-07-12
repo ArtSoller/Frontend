@@ -9,12 +9,11 @@ import { LandingPageModalView } from "../../shared/ui/Modals/LandingPageModalVie
 
 import { RootState } from "../../app/store/store.ts"
 import { closeModal } from "../../features/SignUpButton/model/SignUpModalSlice.ts"
-import { authService } from "../../shared/services/auth-service"
-
 import {
     SignUpFormData,
     validationSchemas
 } from "../../shared/services/validation-service"
+import { authService } from "../../shared/services/auth-service"
 
 export const SignUpModal = () => {
     const [data, setData] = useState<SignUpFormData>({
@@ -30,8 +29,6 @@ export const SignUpModal = () => {
         (state: RootState) => state.SignUpModal.isOpen
     )
     const validateSchema = validationSchemas.registration
-
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleCloseModal = () => {
@@ -49,6 +46,7 @@ export const SignUpModal = () => {
         e.preventDefault()
         const isValid = validate()
         if (!isValid) return
+
         const { username, email, password } = data
         const payload = { username, email, password }
         const toastId = toast.loading("Please wait patiently...", {
@@ -65,6 +63,7 @@ export const SignUpModal = () => {
                     isLoading: false,
                     autoClose: 3000
                 })
+                navigate("workspace")
             })
             .catch(error => {
                 console.error("Error during registration:", error)
@@ -75,7 +74,6 @@ export const SignUpModal = () => {
                     isLoading: false,
                     autoClose: 3000
                 })
-                navigate("workspace")
             })
     }
 
