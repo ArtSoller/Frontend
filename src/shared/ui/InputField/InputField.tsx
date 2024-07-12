@@ -1,42 +1,7 @@
 import React from "react"
 
-import { createTheme, TextField, ThemeProvider } from "@mui/material"
-
-const theme = createTheme({
-    components: {
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                            borderColor: "#FFFFFF"
-                        },
-                        "&:hover fieldset": {
-                            borderColor: "#FFFFFF"
-                        },
-                        "&.Mui-focused fieldset": {
-                            borderColor: "#FFFFFF"
-                        },
-                        "& .MuiInputBase-input": {
-                            backgroundColor: "#FFFFFF"
-                        },
-                        "&.Mui-error": {
-                            "& fieldset": {
-                                borderColor: "#FFFFFF"
-                            },
-                            "&:hover fieldset": {
-                                borderColor: "#FF0000"
-                            },
-                            "&.Mui-focused fieldset": {
-                                borderColor: "#FF0000"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-})
+import { TextField, ThemeProvider } from "@mui/material"
+import { muiTheme } from "../../services/mui-service"
 
 interface InputField {
     label: string
@@ -61,7 +26,7 @@ export const InputField = ({
         onChange({ name: target.name, value: target.value })
     }
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={muiTheme}>
             <TextField
                 label={label}
                 name={name}
