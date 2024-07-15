@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom"
 import { ProfileFields } from "../../features/SideBarFeatures/ProfileFields"
 import { Links } from "../../features/SideBarFeatures/Links"
 
-// import FeedAlt from "../../shared/media/FeedAlt.svg"
-import Home from "../../shared/media/Home.svg";
-import React from "react";
+import Logo from "../../shared/media/Logo.svg"
+import Home from "../../shared/media/Home.svg"
+import HomeAlt from "../../shared/media/HomeAlt.svg"
+// import Feed from "../../shared/media/Home.svg"
+// import FeedAlt from "../../shared/media/HomeAlt.svg"
 
 interface SidebarLink {
     name: string
@@ -36,8 +38,8 @@ export const SideBar = () => {
             name: "Feed",
             path: "/workspace/feed",
             icon: {
-                img: Feed.toString(),
-                imgAlt: FeedAlt.toString(),
+                img: Home.toString(),
+                imgAlt: HomeAlt.toString(),
                 altName: "Feed Icon",
                 classes: "h-5 w-5"
             }
@@ -50,7 +52,7 @@ export const SideBar = () => {
     return (
         <div className='bg-viat-bg-shade col-span-3 h-screen sticky top-0 px-6'>
             <img
-                src={Home.toString()}
+                src={Logo.toString()}
                 alt='Capital Compass Logo'
                 className='h-10 w-auto'
             /> <ProfileFields/>

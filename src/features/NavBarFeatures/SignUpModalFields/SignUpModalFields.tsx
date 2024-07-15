@@ -69,7 +69,7 @@ export const SignUpModalFields = ({
                     className='h-10 w-auto'
                 />
             </div>
-            <LandingPageModalLayout message='Come Join Us'>
+            <LandingPageModalLayout>
                 <form className='flex flex-col space-y-4' onSubmit={onSubmit}>
                     {signUpFields.map(field => (
                         <InputField
