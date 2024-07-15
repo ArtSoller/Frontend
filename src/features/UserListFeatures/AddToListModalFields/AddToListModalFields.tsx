@@ -3,7 +3,7 @@ import { Autocomplete, TextField } from "@mui/material"
 
 import { httpService } from "../../../shared/services/http-service"
 
-interface Country {
+interface Currency {
     id: number
     name: string
 }
@@ -15,25 +15,25 @@ interface City {
 }
 
 export const AddToListModalFields = () => {
-    const [countries, setCountries] = useState<Country[]>([])
+    const [currencies, setCurrencies] = useState<Currency[]>([])
     const [cities, setCities] = useState<City[]>([])
-    const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
+    const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null)
     const [selectedCity, setSelectedCity] = useState<City | null>(null)
 
-    const handleCountrySearch = async (searchTerm: string) => {
+    const handleCurrencySearch = async (searchTerm: string) => {
         try {
-            const response = await httpService.get(`countries?search=${searchTerm}`)
-            setCountries(response.data)
+            const response = await httpService.get(`currencies?search=${searchTerm}`)
+            setCurrencies(response.data)
         } catch (error) {
-            console.error("Error searching countries:", error)
+            console.error("Error searching currencies:", error)
         }
     }
 
     const handleCitySearch = async (searchTerm: string) => {
-        if (selectedCountry) {
+        if (selectedCurrency) {
             try {
                 const response = await httpService.get(
-                    `cities?search=${searchTerm}&countryId=${selectedCountry.id}`
+                    `cities?search=${searchTerm}&countryId=${selectedCurrency.id}`
                 )
                 setCities(response.data)
             } catch (error) {
@@ -42,8 +42,8 @@ export const AddToListModalFields = () => {
         }
     }
 
-    const handleSelectCountry = (country: Country | null) => {
-        setSelectedCountry(country)
+    const handleSelectCurrency = (currency: Currency | null) => {
+        setSelectedCurrency(currency)
         setSelectedCity(null)
         setCities([])
     }
@@ -56,18 +56,18 @@ export const AddToListModalFields = () => {
         <>
             <div className='col-span-12'>
                 <Autocomplete
-                    options={countries}
+                    options={currencies}
                     getOptionLabel={option => option.name}
                     renderInput={params => (
                         <TextField
                             {...params}
-                            label='Country'
+                            label='Currency'
                             variant='outlined'
-                            onChange={event => handleCountrySearch(event.target.value)}
+                            onChange={event => handleCurrencySearch(event.target.value)}
                         />
                     )}
-                    value={selectedCountry}
-                    onChange={(_, newValue) => handleSelectCountry(newValue)}
+                    value={selectedCurrency}
+                    onChange={(_, newValue) => handleSelectCurrency(newValue)}
                 />
             </div>
             <div className='col-span-12'>
@@ -77,14 +77,14 @@ export const AddToListModalFields = () => {
                     renderInput={params => (
                         <TextField
                             {...params}
-                            label='City'
+                            label='Value'
                             variant='outlined'
                             onChange={event => handleCitySearch(event.target.value)}
                         />
                     )}
                     value={selectedCity}
                     onChange={(_, newValue) => handleSelectCity(newValue)}
-                    disabled={!selectedCountry}
+                    disabled={!selectedCurrency}
                 />
             </div>
         </>
