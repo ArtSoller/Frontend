@@ -10,6 +10,7 @@ export default {
                 "viat-secondary": "#A9B5CC",
                 "viat-accent": "#155eef",
                 "viat-wh": "#FFFFFF",
+                "viat-back": "#f6f6f7",
             },
             fontFamily: {
                 "viat-title": ["Inter", "sans-serif"],
