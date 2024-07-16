@@ -17,12 +17,10 @@ export const PageHeader = () => {
     return (
         <div className='p-6'>
             <div className='flex justify-between items-center mb-4'>
-                <p className='text-viat-primary font-viat-title text-viat-size-title font-bold'>
-                    My Lists
-                </p>
-                <AddToListButton />
+                <h1 className='text-2xl font-bold mb-4'>My alerts</h1>
+                <AddToListButton/>
                 <WorkspacePageModalView isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <AddToListModalFields />
+                    <AddToListModalFields/>
                 </WorkspacePageModalView>
             </div>
         </div>
