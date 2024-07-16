@@ -28,7 +28,7 @@ export const authService = {
             email: decodedToken.email,
             roles: decodedToken.roles
         }
-
+        localStorage.setItem('user_id', user.id);
         store.dispatch(setUser(user))
         store.dispatch(setAccessToken(data.access_token))
         return data.message
@@ -42,9 +42,9 @@ export const authService = {
             id: decodedToken.user_id,
             username: decodedToken.username,
             email: decodedToken.email,
-            roles: decodedToken.roles
+            roles: decodedToken.roles,
         }
-
+        localStorage.setItem('user_id', user.id);
         store.dispatch(setUser(user))
         store.dispatch(setAccessToken(data.access_token))
         return data.message
