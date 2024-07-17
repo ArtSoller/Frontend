@@ -49,7 +49,7 @@ export const SignUpModal = () => {
 
         const { username, email, password } = data
         const payload = { username, email, password }
-        const toastId = toast.loading("Please wait patiently...", {
+        const toastId = toast.loading("Download is in progress. Please wait...", {
             position: "top-center"
         })
 

@@ -48,7 +48,7 @@ export const SignInModal = () => {
         if (!isValid) return
         const { email, password } = data
         const payload = { email, password }
-        const toastId = toast.loading("Please wait patiently...", {
+        const toastId = toast.loading("Download is in progress. Please wait...", {
             position: "top-center"
         })
 
