@@ -1,5 +1,8 @@
 import { useState } from "react"
 import { TextField, Button } from "@mui/material"
+import { useDispatch } from "react-redux"
+
+import { closeModal } from "../../NavBarFeatures/AddToListButton/model/AddToListModalSlice.ts"
 
 import { httpService } from "../../../shared/services/http-service"
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField"
@@ -16,6 +19,7 @@ interface FieldsData {
     currencySearchTerm: string
 }
 
+
 export const AddToListModalFields = () => {
     const [data, setData] = useState<FieldsData>({
         currencies: [],
@@ -23,6 +27,8 @@ export const AddToListModalFields = () => {
         exchangeRate: "",
         currencySearchTerm: ""
     })
+
+    const dispatch = useDispatch()
 
     const handleChange = (target: {
         name: string
@@ -62,6 +68,7 @@ export const AddToListModalFields = () => {
                     alert_rate: data.exchangeRate
                 })
                 console.log("Alert added successfully:", response.data)
+                dispatch(closeModal()) // Закрыть модальное окно после успешного добавления
             } catch (error) {
                 console.error("Error adding alert:", error)
             }
@@ -113,7 +120,7 @@ export const AddToListModalFields = () => {
                     className='bg-viat-primary text-white font-bold py-2 px-4 rounded'
                     onClick={handleSubmit}
                 >
-                    Send
+                    ADD ALERT
                 </Button>
             </div>
         </>
