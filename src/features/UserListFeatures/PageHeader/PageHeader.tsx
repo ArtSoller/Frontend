@@ -15,13 +15,15 @@ export const PageHeader = () => {
     }
 
     return (
-        <div className='p-6'>
-            <div className='flex justify-between items-center mb-4'>
-                <h1 className='text-2xl font-bold mb-4'>My alerts</h1>
-                <AddToListButton/>
-                <WorkspacePageModalView isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <AddToListModalFields/>
-                </WorkspacePageModalView>
+        <div className='p-6 bg-gray-100'>
+            <div className='flex items-center justify-between mb-4'>
+                <h1 className='text-3xl font-semibold text-gray-800'>My Alerts</h1>
+                <div className='flex space-x-4'>
+                    <AddToListButton/>
+                    <WorkspacePageModalView isOpen={isModalOpen} onClose={handleCloseModal}>
+                        <AddToListModalFields/>
+                    </WorkspacePageModalView>
+                </div>
             </div>
         </div>
     )
