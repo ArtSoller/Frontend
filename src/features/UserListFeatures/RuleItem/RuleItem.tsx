@@ -1,7 +1,8 @@
 import AlertIcon from "../../../shared/media/Alert.svg";
 
-interface AlertProps {
-    alert: {
+
+interface RuleProps {
+    rule: {
         id: number;
         user_id: number;
         currency: {
@@ -11,7 +12,7 @@ interface AlertProps {
     };
 }
 
-export const AlertItem = ({ alert }: AlertProps) => {
+export const RuleItem = ({ rule }: RuleProps) => {
     return (
         <div>
         <div className='bg-viat-secondary shadow-md rounded-md p-4 mt-4'>
