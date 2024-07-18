@@ -1,23 +1,22 @@
-import { useState, useEffect } from "react";
-import { PageHeader } from "../../features/UserListFeatures/PageHeader";
-import { EmptyListPicture } from "../../features/UserListFeatures/EmptyListPicture";
-import { AlertItem } from "../../features/UserListFeatures/AlertItem";
-import { httpService } from "../../shared/services/http-service";
+import {useState, useEffect} from "react";
+import {PageHeader} from "../../features/UserListFeatures/PageHeader";
+import {EmptyListPicture} from "../../features/UserListFeatures/EmptyListPicture";
+import {RuleItem} from "../../features/UserListFeatures/RuleItem";
+import {httpService} from "../../shared/services/http-service";
 import {toast} from "react-toastify";
 
-interface Alert {
+interface Rule {
     id: number;
     user_id: number;
     currency: {
         name: string;
     };
     alert_rate: number;
+    rule_status: boolean;
 }
 
 export const UserListsPage = () => {
-    const [alerts, setAlerts] = useState<Alert[]>([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
+    const [rules, setRules] = useState<Rule[]>([]);
 
     useEffect(() => {
         let isMounted = true;
@@ -30,16 +29,15 @@ export const UserListsPage = () => {
                 try {
                     const userId = localStorage.getItem('user_id');
                     // const token = localStorage.getItem('token');
-                    const response = await httpService.get(`/get-alerts?user_id=${userId}`);
-                    setAlerts(response.data);
+                    const response = await httpService.get(`/get-rules?user_id=${userId}`);
+                    setRules(response.data);
                     toast.update(toastId, {
                         render: "Loaded successfully",
                         type: "success",
                         isLoading: false,
-                        autoClose: 5000
+                        autoClose: 1500
                     });
                 } catch (error) {
-                    // setError("Failed to load alerts");
                     toast.update(toastId, {
                         render: "Failed to load alerts",
                         type: "error",
@@ -56,25 +54,19 @@ export const UserListsPage = () => {
             isMounted = false;
         };
     }, []);
-    //
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
-    //
-    // if (error) {
-    //     return <div>Error: {error}</div>;
-    // }
+
+    const activeRules = rules.filter(rule => rule.rule_status);
 
     return (
         <div className='col-span-9'>
-            <PageHeader />
+            <PageHeader/>
             <main className='h-screen bg-viat-back'>
-                {alerts.length === 0 ? (
-                    <EmptyListPicture />
+                {activeRules.length === 0 ? (
+                    <EmptyListPicture/>
                 ) : (
                     <div className="alerts-list">
-                        {alerts.map(alert => (
-                            <AlertItem key={alert.id} alert={alert} /> // Используйте компонент AlertItem
+                        {activeRules.map(rule => (
+                            <RuleItem key={rule.id} rule={rule}/>
                         ))}
                     </div>
                 )}
