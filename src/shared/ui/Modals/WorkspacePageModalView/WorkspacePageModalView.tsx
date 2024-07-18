@@ -1,4 +1,5 @@
 import React from "react"
+import { IconButton } from "@mui/material"
 
 interface ModalProps {
     isOpen: boolean
@@ -19,7 +20,10 @@ export const WorkspacePageModalView: React.FC<ModalProps> = ({
                 className='fixed inset-0 bg-viat-bg bg-opacity-20 transition-opacity'
                 onClick={onClose}
             />
-            <div className='relative grid grid-cols-12 gap-8 bg-white border-2 border-viat-primary rounded-md p-8 w-10/12 max-w-screen-lg'>
+            <div className='relative grid grid-cols-12 gap-8 bg-white border-2 border-viat-primary rounded-md p-8 w-8/12 max-w-screen-md'>
+                <div className='col-span-1 flex justify-end'>
+                    <IconButton onClick={onClose}>X</IconButton>
+                </div>
                 {children}
             </div>
         </div>

@@ -25,17 +25,17 @@ export const SideBar = () => {
     const location = useLocation()
     const sidebarLinksConfig: SidebarLink[] = [
         {
-            name: "My Alerts",
+            name: "My Active Rules",
             path: "/workspace",
             icon: {
                 img: Home.toString(),
                 imgAlt: HomeAlt.toString(),
-                altName: "Home Icon",
+                altName: "Alerts Icon",
                 classes: "h-5 w-5"
             }
         },
         {
-            name: "Feed",
+            name: "My Inactive Rules",
             path: "/workspace/feed",
             icon: {
                 img: Home.toString(),
