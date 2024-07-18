@@ -9,6 +9,7 @@ interface RuleProps {
             name: string;
         };
         alert_rate: number;
+        rule_status: boolean;
     };
 }
 
@@ -21,8 +22,8 @@ export const RuleItem = ({ rule }: RuleProps) => {
                 <div className='flex flex-col space-y-1'>
                     <div className='font-viat-small text-viat-size-body text-viat-text'>
                         {/*TODO: Make link and show username*/}
-                        <div>Currency: {alert.currency.name}</div>
-                        <div>Alert Rate: {alert.alert_rate}</div>
+                        <div>Currency: {rule.currency.name}</div>
+                        <div>Rule Rate: {rule.alert_rate}</div>
                     </div>
                 </div>
             </div>

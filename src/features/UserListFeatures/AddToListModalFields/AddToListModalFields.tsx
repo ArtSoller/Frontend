@@ -62,7 +62,7 @@ export const AddToListModalFields = () => {
         if (data.selectedCurrency && data.exchangeRate) {
             try {
                 const userId = localStorage.getItem('user_id'); // Получить user_id из локального хранилища
-                const response = await httpService.post('/alerts', {
+                const response = await httpService.post('/rules', {
                     user_id: userId,
                     currency_id: data.selectedCurrency.id,
                     alert_rate: data.exchangeRate
@@ -120,7 +120,7 @@ export const AddToListModalFields = () => {
                     className='bg-viat-primary text-white font-bold py-2 px-4 rounded'
                     onClick={handleSubmit}
                 >
-                    ADD ALERT
+                    ADD RULE
                 </Button>
             </div>
         </>
