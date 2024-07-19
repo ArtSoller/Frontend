@@ -9,6 +9,7 @@ interface Rule {
     id: number;
     user_id: number;
     currency: {
+        id: number;
         name: string;
     };
     alert_rate: number;
@@ -18,42 +19,51 @@ interface Rule {
 export const UserFeedPage = () => {
     const [rules, setRules] = useState<Rule[]>([]);
 
+    const fetchAlerts = async () => {
+        const toastId = toast.loading("Loading....", {
+            position: "top-center"
+        });
+
+        try {
+            const userId = localStorage.getItem('user_id');
+            const response = await httpService.get(`/get-rules?user_id=${userId}`);
+            setRules(response.data);
+            toast.update(toastId, {
+                render: "Loaded successfully",
+                type: "success",
+                isLoading: false,
+                autoClose: 1500
+            });
+        } catch (error) {
+            toast.update(toastId, {
+                render: "Failed to load alerts",
+                type: "error",
+                isLoading: false,
+                autoClose: 5000
+            });
+            console.error("Error fetching alerts:", error);
+        }
+    };
+
     useEffect(() => {
         let isMounted = true;
-        const fetchAlerts = async () => {
-            if (isMounted) {
-                const toastId = toast.loading("Loading....", {
-                    position: "top-center"
-                });
-
-                try {
-                    const userId = localStorage.getItem('user_id');
-                    // const token = localStorage.getItem('token');
-                    const response = await httpService.get(`/get-rules?user_id=${userId}`);
-                    setRules(response.data);
-                    toast.update(toastId, {
-                        render: "Loaded successfully",
-                        type: "success",
-                        isLoading: false,
-                        autoClose: 1500
-                    });
-                } catch (error) {
-                    toast.update(toastId, {
-                        render: "Failed to load alerts",
-                        type: "error",
-                        isLoading: false,
-                        autoClose: 5000
-                    });
-                    console.error("Error fetching alerts:", error);
-                }
-            }
-        };
-
-        fetchAlerts();
+        if (isMounted) {
+            fetchAlerts();
+        }
         return () => {
             isMounted = false;
         };
     }, []);
+
+    const handleDelete = (id: number) => {
+        setRules(prevRules => prevRules.filter(rule => rule.id !== id));
+    };
+
+    const handleActivate = (id: number) => {
+        setRules(prevRules => prevRules.map(rule =>
+            rule.id === id ? { ...rule, rule_status: true } : rule
+        ));
+    };
 
     const activeRules = rules.filter(rule => !rule.rule_status);
 
@@ -66,7 +76,7 @@ export const UserFeedPage = () => {
                 ) : (
                     <div className="alerts-list">
                         {activeRules.map(rule => (
-                            <RuleItem key={rule.id} rule={rule}/>
+                            <RuleItem key={rule.id} rule={rule} onDelete={handleDelete} onActivate={handleActivate} onUpdate={fetchAlerts}/>
                         ))}
                     </div>
                 )}
