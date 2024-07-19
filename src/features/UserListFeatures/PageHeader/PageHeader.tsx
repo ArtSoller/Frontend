@@ -5,13 +5,14 @@ import { WorkspacePageModalView } from "../../../shared/ui/Modals/WorkspacePageM
 import { RootState } from "../../../app/store/store.ts"
 import { AddToListModalFields } from "../AddToListModalFields"
 
+
 export const PageHeader = () => {
     const dispatch = useDispatch()
     const isModalOpen = useSelector(
         (state: RootState) => state.AddToListModal.isOpen
     )
     const handleCloseModal = () => {
-        dispatch(closeModal())
+        dispatch(closeModal());
     }
 
     return (
@@ -19,7 +20,7 @@ export const PageHeader = () => {
             <div className='flex items-center justify-between mb-4'>
                 <h1 className='text-3xl font-semibold text-gray-800'>My Alerts</h1>
                 <div className='flex space-x-4'>
-                    <AddToListButton/>
+                    {location.pathname === "/workspace" && <AddToListButton />}
                     <WorkspacePageModalView isOpen={isModalOpen} onClose={handleCloseModal}>
                         <AddToListModalFields/>
                     </WorkspacePageModalView>
