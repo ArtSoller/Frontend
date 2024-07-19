@@ -1,5 +1,5 @@
 import React from "react"
-import { IconButton } from "@mui/material"
+import CloseIcon from '@mui/icons-material/Close'; // Импортируем иконку закрытия
 
 interface ModalProps {
     isOpen: boolean
@@ -22,7 +22,7 @@ export const WorkspacePageModalView: React.FC<ModalProps> = ({
             />
             <div className='relative grid grid-cols-12 gap-8 bg-white border-2 border-viat-primary rounded-md p-8 w-8/12 max-w-screen-md'>
                 <div className='col-span-1 flex justify-end'>
-                    <IconButton onClick={onClose}>X</IconButton>
+                    <CloseIcon onClick={onClose}/>
                 </div>
                 {children}
             </div>
