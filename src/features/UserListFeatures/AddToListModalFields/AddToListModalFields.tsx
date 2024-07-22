@@ -1,62 +1,77 @@
-import { useState } from "react"
-import { TextField, Button } from "@mui/material"
-import { useDispatch } from "react-redux"
-
-import { closeModal } from "../../NavBarFeatures/AddToListButton/model/AddToListModalSlice.ts"
-
-import { httpService } from "../../../shared/services/http-service"
-import { AutocompleteField } from "../../../shared/ui/AutocompleteField"
+import { useState } from "react";
+import { TextField, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../NavBarFeatures/AddToListButton/model/AddToListModalSlice.ts";
+import { httpService } from "../../../shared/services/http-service";
+import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
 
 interface Currency {
-    id: number
-    name: string
+    id: number;
+    name: string;
 }
 
 interface FieldsData {
-    currencies: Currency[]
-    selectedCurrency: Currency | null
-    exchangeRate: string
-    currencySearchTerm: string
+    currencies: Currency[];
+    selectedCurrency: Currency | null;
+    exchangeRate: string;
+    currencySearchTerm: string;
+    currentExchangeRate: string;
 }
-
 
 export const AddToListModalFields = () => {
     const [data, setData] = useState<FieldsData>({
         currencies: [],
         selectedCurrency: null,
         exchangeRate: "",
-        currencySearchTerm: ""
-    })
+        currencySearchTerm: "",
+        currentExchangeRate: ""
+    });
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleChange = (target: {
-        name: string
-        value: string | Currency | null
+        name: string;
+        value: string | Currency | null;
     }) => {
         setData(prevState => ({
             ...prevState,
             [target.name]: target.value
-        }))
+        }));
         if (target.name === "selectedCurrency") {
-            setData(prevState => ({
-                ...prevState,
-                exchangeRate: "" // Сбросить предполагаемое значение курса при выборе новой валюты
-            }))
+            if (target.value && typeof target.value !== 'string') {
+                fetchExchangeRate(target.value);
+            } else {
+                setData(prevState => ({
+                    ...prevState,
+                    currentExchangeRate: "" // Сбросить текущий курс при сбросе валюты
+                }));
+            }
         }
-    }
+    };
 
     const handleSearch = async (searchTerm: string) => {
         try {
-            const response = await httpService.get(`currencies?search=${searchTerm}`)
+            const response = await httpService.get(`currencies?search=${searchTerm}`);
             setData(prevState => ({
                 ...prevState,
                 currencies: response.data
-            }))
+            }));
         } catch (error) {
-            console.error("Error searching currencies:", error)
+            console.error("Error searching currencies:", error);
         }
-    }
+    };
+
+    const fetchExchangeRate = async (currency: Currency) => {
+        try {
+            const response = await httpService.get(`exchange-rate?currency_id=${currency.id}`);
+            setData(prevState => ({
+                ...prevState,
+                currentExchangeRate: response.data.rate
+            }));
+        } catch (error) {
+            console.error("Error fetching exchange rate:", error);
+        }
+    };
 
     const handleSubmit = async () => {
         if (data.selectedCurrency && data.exchangeRate) {
@@ -66,16 +81,16 @@ export const AddToListModalFields = () => {
                     user_id: userId,
                     currency_id: data.selectedCurrency.id,
                     alert_rate: data.exchangeRate
-                })
-                console.log("Alert added successfully:", response.data)
-                dispatch(closeModal()) // Закрыть модальное окно после успешного добавления
+                });
+                console.log("Alert added successfully:", response.data);
+                dispatch(closeModal()); // Закрыть модальное окно после успешного добавления
             } catch (error) {
-                console.error("Error adding alert:", error)
+                console.error("Error adding alert:", error);
             }
         } else {
-            console.error("Missing required fields")
+            console.error("Missing required fields");
         }
-    }
+    };
 
     return (
         <>
@@ -92,22 +107,35 @@ export const AddToListModalFields = () => {
                         handleChange({
                             name: "currencySearchTerm",
                             value: event.target.value
-                        })
-                        handleSearch(event.target.value)
+                        });
+                        handleSearch(event.target.value);
                     }}
                     onValueChange={newValue =>
-                        handleChange({name: "selectedCurrency", value: newValue})
+                        handleChange({ name: "selectedCurrency", value: newValue })
                     }
                 />
             </div>
             {data.selectedCurrency && (
                 <div className='col-span-12'>
                     <TextField
-                        label='Exchange Rate'
+                        label='Current Exchange Rate'
+                        variant='outlined'
+                        value={data.currentExchangeRate}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        fullWidth
+                    />
+                </div>
+            )}
+            {data.selectedCurrency && (
+                <div className='col-span-12'>
+                    <TextField
+                        label='Alert Exchange Rate'
                         variant='outlined'
                         value={data.exchangeRate}
                         onChange={event =>
-                            handleChange({name: "exchangeRate", value: event.target.value})
+                            handleChange({ name: "exchangeRate", value: event.target.value })
                         }
                         fullWidth
                     />
@@ -124,5 +152,5 @@ export const AddToListModalFields = () => {
                 </Button>
             </div>
         </>
-    )
-}
+    );
+};
