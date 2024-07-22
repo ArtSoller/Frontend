@@ -23,12 +23,12 @@ interface RuleProps {
     };
     onDelete: (id: number) => void;
     onActivate: (id: number) => void;
-    onUpdate: () => void; // New prop for updating parent component
+    onUpdate: () => void;
 }
 
 export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) => {
     const dispatch = useDispatch();
-    const isModalOpen = useSelector((state: RootState) => state.EditRuleModal.isOpen);
+    const { isOpen, ruleId } = useSelector((state: RootState) => state.EditRuleModal);
 
     const handleCloseModal = () => {
         dispatch(closeModal());
@@ -38,7 +38,7 @@ export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) =>
         try {
             await httpService.delete(`/rules/${rule.id}`);
             onDelete(rule.id);
-            onUpdate(); // Update parent component after deletion
+            onUpdate();
         } catch (error) {
             console.error('Error deleting rule:', error);
         }
@@ -48,7 +48,7 @@ export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) =>
         try {
             await httpService.put(`/change_activity_rules/${rule.id}`);
             onActivate(rule.id);
-            onUpdate(); // Update parent component after activation
+            onUpdate();
         } catch (error) {
             console.error('Error activating rule:', error);
         }
@@ -71,16 +71,16 @@ export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) =>
                         <RadioButtonUncheckedIcon onClick={handleActivate} className='cursor-pointer' />
                     )}
                     <DeleteIcon onClick={handleDelete} className='cursor-pointer' />
-                    <EditRuleButton />
-                    <WorkspacePageModalView isOpen={isModalOpen} onClose={handleCloseModal}>
-                        <EditRuleModalFields
-                            initialCurrency={{
-                                id: rule.currency.id, // Ensure `rule.currency` has an `id` field
-                                name: rule.currency.name
-                            }}
-                            initialExchangeRate={rule.alert_rate.toString()}
-                        />
-                    </WorkspacePageModalView>
+                    <EditRuleButton ruleId={rule.id} />
+                    {isOpen && ruleId === rule.id && (
+                        <WorkspacePageModalView isOpen={isOpen} onClose={handleCloseModal}>
+                            <EditRuleModalFields
+                                initialCurrency={rule.currency} // Передаем объект валюты
+                                initialExchangeRate={rule.alert_rate.toString()}
+                                ruleId={ruleId} // передайте идентификатор правила здесь
+                            />
+                        </WorkspacePageModalView>
+                    )}
                 </div>
             </div>
         </div>

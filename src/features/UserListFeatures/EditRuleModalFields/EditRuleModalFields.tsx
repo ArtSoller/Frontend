@@ -20,11 +20,13 @@ interface FieldsDataU {
 interface EditRuleModalFieldsProps {
     initialCurrency: CurrencyRule | null;
     initialExchangeRate: string;
+    ruleId: number; // Добавьте идентификатор правила
 }
 
 export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                                                                             initialCurrency,
-                                                                            initialExchangeRate
+                                                                            initialExchangeRate,
+                                                                            ruleId
                                                                         }) => {
     const [data, setData] = useState<FieldsDataU>({
         currencies: [],
@@ -60,6 +62,7 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
         }));
     }, [initialCurrency, initialExchangeRate]);
 
+
     const handleChange = (target: {
         name: string;
         value: string | CurrencyRule | null;
@@ -91,26 +94,31 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
     const handleSubmit = async () => {
         if (data.selectedCurrency && data.exchangeRate) {
             try {
-                const userId = localStorage.getItem('user_id');
-                const response = await httpService.post('/rules', {
-                    user_id: userId,
+                const response = await httpService.put(`/rules/${ruleId}`, {
                     currency_id: data.selectedCurrency.id,
                     alert_rate: data.exchangeRate
                 });
-                console.log("Alert added successfully:", response.data);
-                dispatch(closeModal()); // Close modal after successful addition
+                console.log("Alert updated successfully:", response.data);
+                dispatch(closeModal()); // Close modal after successful update
             } catch (error) {
-                console.error("Error adding alert:", error);
+                console.error("Error updating alert:", error);
             }
         } else {
-            console.error("Missing required fields");
+            console.error("No changes detected or missing required fields");
         }
     };
+
+    useEffect(() => {
+        console.log("Initial Currency:", initialCurrency);
+        console.log("Initial Exchange Rate:", initialExchangeRate);
+        console.log("Initial Exchange Rate:", ruleId);
+
+    }, [initialCurrency, initialExchangeRate, ruleId]);
 
     return (
         <>
             <div className='col-span-12'>
-                Create your alert
+                Update your alert
             </div>
             <div className='col-span-12'>
                 <AutocompleteField
@@ -130,7 +138,7 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                     }
                 />
             </div>
-            {data.selectedCurrency && (
+            {(
                 <div className='col-span-12'>
                     <TextField
                         label='Exchange Rate'
