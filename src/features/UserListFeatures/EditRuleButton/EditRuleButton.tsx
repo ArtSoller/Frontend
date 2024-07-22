@@ -1,12 +1,17 @@
-import { useDispatch } from "react-redux"
-import { openModal } from "./model/EditRuleModalSlice.ts"
-import EditIcon from '@mui/icons-material/Edit'; // Новая иконка редактирования
+import { useDispatch } from "react-redux";
+import { openModal } from "./model/EditRuleModalSlice.ts";
+import EditIcon from '@mui/icons-material/Edit';
 
-export const EditRuleButton = () => {
-    const dispatch = useDispatch()
+interface EditRuleButtonProps {
+    ruleId: number;
+}
+
+export const EditRuleButton: React.FC<EditRuleButtonProps> = ({ ruleId }) => {
+    const dispatch = useDispatch();
 
     const handleOpenModal = () => {
-        dispatch(openModal())
+        dispatch(openModal(ruleId)); // Pass the rule ID to the modal
     }
+
     return <EditIcon onClick={handleOpenModal} className='cursor-pointer' />
 }

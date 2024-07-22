@@ -1,22 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface ModalState {
-    isOpen: boolean
+    isOpen: boolean;
+    ruleId: number | null;
 }
 
 const initialState: ModalState = {
-    isOpen: false
+    isOpen: false,
+    ruleId: null
 }
 
 const EditRuleModalSlice = createSlice({
     name: "EditRuleModal",
     initialState,
     reducers: {
-        openModal: state => {
-            state.isOpen = true
+        openModal: (state, action: PayloadAction<number>) => {
+            state.isOpen = true;
+            state.ruleId = action.payload; // Store the rule ID
         },
         closeModal: state => {
-            state.isOpen = false
+            state.isOpen = false;
+            state.ruleId = null; // Clear the rule ID
         }
     }
 })
