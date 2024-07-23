@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../EditRuleButton/model/EditRuleModalSlice.ts";
 import { httpService } from "../../../shared/services/http-service";
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
+import {toast} from "react-toastify";
 
 interface CurrencyRule {
     currency_id: number;
@@ -109,7 +110,14 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
     };
 
     const handleSubmit = async () => {
+        const currentRate = parseFloat(data.currentExchangeRate);
+        const alertRate = parseFloat(data.exchangeRate);
+
         if (data.selectedCurrency && data.exchangeRate) {
+            if (alertRate < currentRate) {
+                toast.error("Alert Exchange Rate cannot be less than the Current Exchange Rate");
+                return;
+            }
             try {
                 console.log(data.selectedCurrency.currency_id);
                 const response = await httpService.put(`/rules/${ruleId}`, {

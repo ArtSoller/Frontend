@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../../NavBarFeatures/AddToListButton/model/AddToListModalSlice.ts";
 import { httpService } from "../../../shared/services/http-service";
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
+import { toast } from "react-toastify"; // Импортируем react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Импортируем стили toastify
 
 interface Currency {
     currency_id: number;
@@ -74,7 +76,15 @@ export const AddToListModalFields = () => {
     };
 
     const handleSubmit = async () => {
+        const currentRate = parseFloat(data.currentExchangeRate);
+        const alertRate = parseFloat(data.exchangeRate);
+
         if (data.selectedCurrency && data.exchangeRate) {
+            if (alertRate < currentRate) {
+                toast.error("Alert Exchange Rate cannot be less than the Current Exchange Rate");
+                return;
+            }
+
             try {
                 const userId = localStorage.getItem('user_id'); // Получить user_id из локального хранилища
                 const response = await httpService.post('/rules', {
