@@ -2,7 +2,7 @@ import React from "react"
 import { Autocomplete, TextField } from "@mui/material"
 
 interface Option {
-    id: number
+    currency_id: number
     name: string
 }
 
@@ -41,7 +41,7 @@ export const AutocompleteField: React.FC<AutocompleteFieldProps> = ({
             value={value}
             onChange={(_, newValue) => onValueChange(newValue)}
             disabled={disabled}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => option.currency_id === value.currency_id}
         />
     )
 }

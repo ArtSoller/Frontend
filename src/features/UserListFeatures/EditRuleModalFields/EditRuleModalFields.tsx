@@ -6,7 +6,7 @@ import { httpService } from "../../../shared/services/http-service";
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
 
 interface CurrencyRule {
-    id: number;
+    currency_id: number;
     name: string;
 }
 
@@ -94,8 +94,9 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
     const handleSubmit = async () => {
         if (data.selectedCurrency && data.exchangeRate) {
             try {
+                console.log(data.selectedCurrency.currency_id);
                 const response = await httpService.put(`/rules/${ruleId}`, {
-                    currency_id: data.selectedCurrency.id,
+                    currency_id: data.selectedCurrency.currency_id,
                     alert_rate: data.exchangeRate
                 });
                 console.log("Alert updated successfully:", response.data);
@@ -107,13 +108,6 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             console.error("No changes detected or missing required fields");
         }
     };
-
-    useEffect(() => {
-        console.log("Initial Currency:", initialCurrency);
-        console.log("Initial Exchange Rate:", initialExchangeRate);
-        console.log("Initial Exchange Rate:", ruleId);
-
-    }, [initialCurrency, initialExchangeRate, ruleId]);
 
     return (
         <>

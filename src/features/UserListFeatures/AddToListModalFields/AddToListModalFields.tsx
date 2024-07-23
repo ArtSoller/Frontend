@@ -6,7 +6,7 @@ import { httpService } from "../../../shared/services/http-service";
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
 
 interface Currency {
-    id: number;
+    currency_id: number;
     name: string;
 }
 
@@ -63,7 +63,7 @@ export const AddToListModalFields = () => {
 
     const fetchExchangeRate = async (currency: Currency) => {
         try {
-            const response = await httpService.get(`exchange-rate?currency_id=${currency.id}`);
+            const response = await httpService.get(`exchange-rate?currency_id=${currency.currency_id}`);
             setData(prevState => ({
                 ...prevState,
                 currentExchangeRate: response.data.rate
@@ -79,7 +79,7 @@ export const AddToListModalFields = () => {
                 const userId = localStorage.getItem('user_id'); // Получить user_id из локального хранилища
                 const response = await httpService.post('/rules', {
                     user_id: userId,
-                    currency_id: data.selectedCurrency.id,
+                    currency_id: data.selectedCurrency.currency_id,
                     alert_rate: data.exchangeRate
                 });
                 console.log("Alert added successfully:", response.data);

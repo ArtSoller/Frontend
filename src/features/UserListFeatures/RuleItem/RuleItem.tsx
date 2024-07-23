@@ -15,7 +15,7 @@ interface RuleProps {
         id: number;
         user_id: number;
         currency: {
-            id: number;
+            currency_id: number;
             name: string;
         };
         alert_rate: number;
