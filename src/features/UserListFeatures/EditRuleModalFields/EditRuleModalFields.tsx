@@ -15,6 +15,7 @@ interface FieldsDataU {
     selectedCurrency: CurrencyRule | null;
     exchangeRate: string;
     currencySearchTerm: string;
+    currentExchangeRate: string;
 }
 
 interface EditRuleModalFieldsProps {
@@ -32,7 +33,8 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
         currencies: [],
         selectedCurrency: initialCurrency,
         exchangeRate: initialExchangeRate,
-        currencySearchTerm: ""
+        currencySearchTerm: "",
+        currentExchangeRate: ""
     });
 
     const dispatch = useDispatch();
@@ -60,8 +62,10 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             selectedCurrency: initialCurrency,
             exchangeRate: initialExchangeRate
         }));
+        if (initialCurrency) {
+            fetchCurrentExchangeRate(initialCurrency);
+        }
     }, [initialCurrency, initialExchangeRate]);
-
 
     const handleChange = (target: {
         name: string;
@@ -71,7 +75,8 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             ...prevState,
             [target.name]: target.value
         }));
-        if (target.name === "selectedCurrency") {
+        if (target.name === "selectedCurrency" && target.value) {
+            fetchCurrentExchangeRate(target.value as CurrencyRule);
             setData(prevState => ({
                 ...prevState,
                 exchangeRate: "" // Reset the exchange rate when a new currency is selected
@@ -88,6 +93,18 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             }));
         } catch (error) {
             console.error("Error searching currencies:", error);
+        }
+    };
+
+    const fetchCurrentExchangeRate = async (currency: CurrencyRule) => {
+        try {
+            const response = await httpService.get(`exchange-rate?currency_id=${currency.currency_id}`);
+            setData(prevState => ({
+                ...prevState,
+                currentExchangeRate: response.data.rate
+            }));
+        } catch (error) {
+            console.error("Error fetching exchange rate:", error);
         }
     };
 
@@ -132,7 +149,20 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                     }
                 />
             </div>
-            {(
+            {data.selectedCurrency && (
+                <div className='col-span-12'>
+                    <TextField
+                        label='Current Exchange Rate'
+                        variant='outlined'
+                        value={data.currentExchangeRate}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        fullWidth
+                    />
+                </div>
+            )}
+            {data.selectedCurrency && (
                 <div className='col-span-12'>
                     <TextField
                         label='Exchange Rate'
