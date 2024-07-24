@@ -17,7 +17,7 @@ interface SidebarLink {
         classes: string;
     };
     isSelected: boolean;
-    badge?: JSX.Element; // Добавлено свойство для бейджа
+    badge?: JSX.Element;
 }
 
 export const SideBar = () => {
@@ -27,7 +27,7 @@ export const SideBar = () => {
     useEffect(() => {
         const fetchInactiveRulesCount = async () => {
             try {
-                const userId = localStorage.getItem('user_id'); // Получить user_id из локального хранилища
+                const userId = localStorage.getItem('user_id');
                 const response = await httpService.get(`/inactive-count?user_id=${userId}`);
                 setInactiveRulesCount(response.data.count);
             } catch (error) {
@@ -36,10 +36,10 @@ export const SideBar = () => {
         };
 
         fetchInactiveRulesCount();
-        const intervalId = setInterval(fetchInactiveRulesCount, 1000); // обновлять каждую минуту
+        const intervalId = setInterval(fetchInactiveRulesCount, 1000);
 
-        return () => clearInterval(intervalId); // Очистка интервала при размонтировании компонента
-    }, [location.pathname]); // Обновление при изменении пути
+        return () => clearInterval(intervalId);
+    }, [location.pathname]);
 
     const sidebarLinksConfig: SidebarLink[] = [
         {

@@ -16,11 +16,11 @@ const EditRuleModalSlice = createSlice({
     reducers: {
         openModal: (state, action: PayloadAction<number>) => {
             state.isOpen = true;
-            state.ruleId = action.payload; // Store the rule ID
+            state.ruleId = action.payload;
         },
         closeModal: state => {
             state.isOpen = false;
-            state.ruleId = null; // Clear the rule ID
+            state.ruleId = null;
         }
     }
 })

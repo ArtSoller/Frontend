@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { closeModal } from "../../NavBarFeatures/AddToListButton/model/AddToListModalSlice.ts";
 import { httpService } from "../../../shared/services/http-service";
 import { AutocompleteField } from "../../../shared/ui/AutocompleteField";
-import { toast } from "react-toastify"; // Импортируем react-toastify
-import 'react-toastify/dist/ReactToastify.css'; // Импортируем стили toastify
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Currency {
     currency_id: number;
@@ -45,7 +45,7 @@ export const AddToListModalFields = () => {
             } else {
                 setData(prevState => ({
                     ...prevState,
-                    currentExchangeRate: "" // Сбросить текущий курс при сбросе валюты
+                    currentExchangeRate: ""
                 }));
             }
         }
@@ -86,14 +86,14 @@ export const AddToListModalFields = () => {
             }
 
             try {
-                const userId = localStorage.getItem('user_id'); // Получить user_id из локального хранилища
+                const userId = localStorage.getItem('user_id');
                 const response = await httpService.post('/rules', {
                     user_id: userId,
                     currency_id: data.selectedCurrency.currency_id,
                     alert_rate: data.exchangeRate
                 });
                 console.log("Alert added successfully:", response.data);
-                dispatch(closeModal()); // Закрыть модальное окно после успешного добавления
+                dispatch(closeModal());
             } catch (error) {
                 console.error("Error adding alert:", error);
             }

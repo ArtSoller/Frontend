@@ -10,7 +10,7 @@ interface SidebarLink {
         classes: string;
     };
     isSelected: boolean;
-    badge?: JSX.Element; // Добавлено свойство для бейджа
+    badge?: JSX.Element;
 }
 
 interface SidebarLinksProps {

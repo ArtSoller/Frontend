@@ -1,5 +1,5 @@
 import React from "react"
-import CloseIcon from '@mui/icons-material/Close'; // Импортируем иконку закрытия
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ModalProps {
     isOpen: boolean

@@ -75,9 +75,9 @@ export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) =>
                     {isOpen && ruleId === rule.id && (
                         <WorkspacePageModalView isOpen={isOpen} onClose={handleCloseModal}>
                             <EditRuleModalFields
-                                initialCurrency={rule.currency} // Передаем объект валюты
+                                initialCurrency={rule.currency}
                                 initialExchangeRate={rule.alert_rate.toString()}
-                                ruleId={ruleId} // передайте идентификатор правила здесь
+                                ruleId={ruleId}
                             />
                         </WorkspacePageModalView>
                     )}

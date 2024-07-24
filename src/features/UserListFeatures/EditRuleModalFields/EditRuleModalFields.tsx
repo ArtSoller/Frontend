@@ -22,7 +22,7 @@ interface FieldsDataU {
 interface EditRuleModalFieldsProps {
     initialCurrency: CurrencyRule | null;
     initialExchangeRate: string;
-    ruleId: number; // Добавьте идентификатор правила
+    ruleId: number;
 }
 
 export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
@@ -41,7 +41,6 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Fetch currencies when component mounts
         const fetchCurrencies = async () => {
             try {
                 const response = await httpService.get('currencies');
@@ -57,7 +56,6 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
     }, []);
 
     useEffect(() => {
-        // Update form fields when initialCurrency or initialExchangeRate change
         setData(prevState => ({
             ...prevState,
             selectedCurrency: initialCurrency,
@@ -80,7 +78,7 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             fetchCurrentExchangeRate(target.value as CurrencyRule);
             setData(prevState => ({
                 ...prevState,
-                exchangeRate: "" // Reset the exchange rate when a new currency is selected
+                exchangeRate: ""
             }));
         }
     };
@@ -125,7 +123,7 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                     alert_rate: data.exchangeRate
                 });
                 console.log("Alert updated successfully:", response.data);
-                dispatch(closeModal()); // Close modal after successful update
+                dispatch(closeModal());
             } catch (error) {
                 console.error("Error updating alert:", error);
             }
