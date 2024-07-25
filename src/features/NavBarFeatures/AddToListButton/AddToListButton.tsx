@@ -8,5 +8,5 @@ export const AddToListButton = () => {
     const handleOpenModal = () => {
         dispatch(openModal())
     }
-    return <ButtonContained label='Add' handleClick={handleOpenModal} />
+    return <ButtonContained className='bg-viat-primary text-viat-bg font-viat-body hover:text-viat-wh font-bold py-2 px-4 rounded-md' label='Add' handleClick={handleOpenModal} />
 }

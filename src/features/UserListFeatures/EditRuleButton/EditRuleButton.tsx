@@ -13,5 +13,5 @@ export const EditRuleButton: React.FC<EditRuleButtonProps> = ({ ruleId }) => {
         dispatch(openModal(ruleId));
     }
 
-    return <EditIcon onClick={handleOpenModal} className='cursor-pointer' />
+    return <EditIcon onClick={handleOpenModal} className='cursor-pointer icon-default icon-hover' />
 }
