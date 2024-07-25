@@ -9,6 +9,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { httpService } from "../../../shared/services/http-service";
 import { EditRuleButton } from "../EditRuleButton";
+import Tippy from '@tippyjs/react'; // Импорт Tippy.js
+import 'tippy.js/dist/tippy.css'; // Импорт стилей для Tippy
+import './styles.css';  // Импорт стилей
 
 interface RuleProps {
     rule: {
@@ -66,12 +69,16 @@ export const RuleItem = ({ rule, onDelete, onActivate, onUpdate }: RuleProps) =>
                         </div>
                     </div>
                     {rule.rule_status ? (
-                        <CheckCircleIcon onClick={handleActivate} className='cursor-pointer' />
+                        <CheckCircleIcon onClick={handleActivate} className='cursor-pointer icon-default icon-hover' />
                     ) : (
-                        <RadioButtonUncheckedIcon onClick={handleActivate} className='cursor-pointer' />
+                        <RadioButtonUncheckedIcon onClick={handleActivate} className='cursor-pointer icon-default icon-hover' />
                     )}
-                    <DeleteIcon onClick={handleDelete} className='cursor-pointer' />
-                    <EditRuleButton ruleId={rule.id} />
+                    <DeleteIcon onClick={handleDelete} className='cursor-pointer icon-default icon-hover' />
+                    <Tippy content='This button toggles the rule activity status'>
+                        <div>
+                            <EditRuleButton ruleId={rule.id} />
+                        </div>
+                    </Tippy>
                     {isOpen && ruleId === rule.id && (
                         <WorkspacePageModalView isOpen={isOpen} onClose={handleCloseModal}>
                             <EditRuleModalFields
