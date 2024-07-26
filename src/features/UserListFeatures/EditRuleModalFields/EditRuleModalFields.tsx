@@ -14,26 +14,30 @@ interface CurrencyRule {
 interface FieldsDataU {
     currencies: CurrencyRule[];
     selectedCurrency: CurrencyRule | null;
-    exchangeRate: string;
+    upperExchangeRate: string;
+    lowerExchangeRate: string;
     currencySearchTerm: string;
     currentExchangeRate: string;
 }
 
 interface EditRuleModalFieldsProps {
     initialCurrency: CurrencyRule | null;
-    initialExchangeRate: string;
+    initialUpperExchangeRate: string;
+    initialLowerExchangeRate: string;
     ruleId: number;
 }
 
 export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                                                                             initialCurrency,
-                                                                            initialExchangeRate,
+                                                                            initialUpperExchangeRate,
+                                                                            initialLowerExchangeRate,
                                                                             ruleId
                                                                         }) => {
     const [data, setData] = useState<FieldsDataU>({
         currencies: [],
         selectedCurrency: initialCurrency,
-        exchangeRate: initialExchangeRate,
+        upperExchangeRate: initialUpperExchangeRate,
+        lowerExchangeRate: initialLowerExchangeRate,
         currencySearchTerm: "",
         currentExchangeRate: ""
     });
@@ -59,12 +63,13 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
         setData(prevState => ({
             ...prevState,
             selectedCurrency: initialCurrency,
-            exchangeRate: initialExchangeRate
+            upperExchangeRate: initialUpperExchangeRate,
+            lowerExchangeRate: initialLowerExchangeRate
         }));
         if (initialCurrency) {
             fetchCurrentExchangeRate(initialCurrency);
         }
-    }, [initialCurrency, initialExchangeRate]);
+    }, [initialCurrency, initialUpperExchangeRate, initialLowerExchangeRate]);
 
     const handleChange = (target: {
         name: string;
@@ -78,7 +83,8 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
             fetchCurrentExchangeRate(target.value as CurrencyRule);
             setData(prevState => ({
                 ...prevState,
-                exchangeRate: ""
+                upperExchangeRate: "",
+                lowerExchangeRate: ""
             }));
         }
     };
@@ -109,18 +115,24 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
 
     const handleSubmit = async () => {
         const currentRate = parseFloat(data.currentExchangeRate);
-        const alertRate = parseFloat(data.exchangeRate);
+        const upperAlertRate = parseFloat(data.upperExchangeRate);
+        const lowerAlertRate = parseFloat(data.lowerExchangeRate);
 
-        if (data.selectedCurrency && data.exchangeRate) {
-            if (alertRate < currentRate) {
-                toast.error("Alert Exchange Rate cannot be less than the Current Exchange Rate");
+        if (data.selectedCurrency && data.upperExchangeRate && data.lowerExchangeRate) {
+            if (upperAlertRate < currentRate) {
+                toast.error("Upper Alert Exchange Rate cannot be less than the Current Exchange Rate");
+                return;
+            }
+            if (lowerAlertRate > currentRate) {
+                toast.error("Lower Alert Exchange Rate cannot be greater than the Current Exchange Rate");
                 return;
             }
             try {
                 console.log(data.selectedCurrency.currency_id);
                 const response = await httpService.put(`/rules/${ruleId}`, {
                     currency_id: data.selectedCurrency.currency_id,
-                    alert_rate: data.exchangeRate
+                    upper_alert_rate: data.upperExchangeRate,
+                    lower_alert_rate: data.lowerExchangeRate
                 });
                 console.log("Alert updated successfully:", response.data);
                 dispatch(closeModal());
@@ -134,8 +146,12 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
 
     return (
         <>
-            <div className='col-span-12'>
-                Update your alert
+            <div className='col-span-12 text-2xl font-bold mb-4'>
+                Update your rule
+            </div>
+            <div className="alert alert-primary col-span-12" role="alert">
+                Upper Alert Exchange Rate cannot be less than the Current Exchange Rate.<br/>
+                Lower Alert Exchange Rate cannot be greater than the Current Exchange Rate.
             </div>
             <div className='col-span-12'>
                 <AutocompleteField
@@ -151,7 +167,7 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                         handleSearch(event.target.value);
                     }}
                     onValueChange={newValue =>
-                        handleChange({ name: "selectedCurrency", value: newValue })
+                        handleChange({name: "selectedCurrency", value: newValue})
                     }
                 />
             </div>
@@ -169,17 +185,30 @@ export const EditRuleModalFields: React.FC<EditRuleModalFieldsProps> = ({
                 </div>
             )}
             {data.selectedCurrency && (
-                <div className='col-span-12'>
-                    <TextField
-                        label='Exchange Rate'
-                        variant='outlined'
-                        value={data.exchangeRate}
-                        onChange={event =>
-                            handleChange({ name: "exchangeRate", value: event.target.value })
-                        }
-                        fullWidth
-                    />
-                </div>
+                <>
+                    <div className='col-span-12'>
+                        <TextField
+                            label='Upper Alert Exchange Rate'
+                            variant='outlined'
+                            value={data.upperExchangeRate}
+                            onChange={event =>
+                                handleChange({name: "upperExchangeRate", value: event.target.value})
+                            }
+                            fullWidth
+                        />
+                    </div>
+                    <div className='col-span-12'>
+                        <TextField
+                            label='Lower Alert Exchange Rate'
+                            variant='outlined'
+                            value={data.lowerExchangeRate}
+                            onChange={event =>
+                                handleChange({name: "lowerExchangeRate", value: event.target.value})
+                            }
+                            fullWidth
+                        />
+                    </div>
+                </>
             )}
             <div className='col-span-12 mt-8 flex justify-end'>
                 <Button

@@ -12,7 +12,8 @@ interface Rule {
         currency_id: number;
         name: string;
     };
-    alert_rate: number;
+    upper_alert_rate: number;
+    lower_alert_rate: number;
     rule_status: boolean;
 }
 

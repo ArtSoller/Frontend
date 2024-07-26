@@ -15,7 +15,8 @@ interface Currency {
 interface FieldsData {
     currencies: Currency[];
     selectedCurrency: Currency | null;
-    exchangeRate: string;
+    upperExchangeRate: string;
+    lowerExchangeRate: string;
     currencySearchTerm: string;
     currentExchangeRate: string;
 }
@@ -24,7 +25,8 @@ export const AddToListModalFields = () => {
     const [data, setData] = useState<FieldsData>({
         currencies: [],
         selectedCurrency: null,
-        exchangeRate: "",
+        upperExchangeRate: "",
+        lowerExchangeRate: "",
         currencySearchTerm: "",
         currentExchangeRate: ""
     });
@@ -77,20 +79,25 @@ export const AddToListModalFields = () => {
 
     const handleSubmit = async () => {
         const currentRate = parseFloat(data.currentExchangeRate);
-        const alertRate = parseFloat(data.exchangeRate);
+        const upperAlertRate = parseFloat(data.upperExchangeRate);
+        const lowerAlertRate = parseFloat(data.lowerExchangeRate);
 
-        if (data.selectedCurrency && data.exchangeRate) {
-            if (alertRate < currentRate) {
-                toast.error("Alert Exchange Rate cannot be less than the Current Exchange Rate");
+        if (data.selectedCurrency && data.upperExchangeRate && data.lowerExchangeRate) {
+            if (upperAlertRate < currentRate) {
+                toast.error("Upper Alert Exchange Rate cannot be less than the Current Exchange Rate");
                 return;
             }
-
+            if (lowerAlertRate > currentRate) {
+                toast.error("Lower Alert Exchange Rate cannot be greater than the Current Exchange Rate");
+                return;
+            }
             try {
                 const userId = localStorage.getItem('user_id');
                 const response = await httpService.post('/rules', {
                     user_id: userId,
                     currency_id: data.selectedCurrency.currency_id,
-                    alert_rate: data.exchangeRate
+                    upper_alert_rate: data.upperExchangeRate,
+                    lower_alert_rate: data.lowerExchangeRate
                 });
                 console.log("Alert added successfully:", response.data);
                 dispatch(closeModal());
@@ -104,8 +111,12 @@ export const AddToListModalFields = () => {
 
     return (
         <>
-            <div className='col-span-12'>
+            <div className='col-span-12 text-2xl font-bold mb-4'>
                 Create your alert
+            </div>
+            <div className="alert alert-primary col-span-12" role="alert">
+                Upper Alert Exchange Rate cannot be less than the Current Exchange Rate.<br/>
+                Lower Alert Exchange Rate cannot be greater than the Current Exchange Rate.
             </div>
             <div className='col-span-12'>
                 <AutocompleteField
@@ -121,7 +132,7 @@ export const AddToListModalFields = () => {
                         handleSearch(event.target.value);
                     }}
                     onValueChange={newValue =>
-                        handleChange({ name: "selectedCurrency", value: newValue })
+                        handleChange({name: "selectedCurrency", value: newValue})
                     }
                 />
             </div>
@@ -139,17 +150,30 @@ export const AddToListModalFields = () => {
                 </div>
             )}
             {data.selectedCurrency && (
-                <div className='col-span-12'>
-                    <TextField
-                        label='Alert Exchange Rate'
-                        variant='outlined'
-                        value={data.exchangeRate}
-                        onChange={event =>
-                            handleChange({ name: "exchangeRate", value: event.target.value })
-                        }
-                        fullWidth
-                    />
-                </div>
+                <>
+                    <div className='col-span-12'>
+                        <TextField
+                            label='Upper Alert Exchange Rate'
+                            variant='outlined'
+                            value={data.upperExchangeRate}
+                            onChange={event =>
+                                handleChange({name: "upperExchangeRate", value: event.target.value})
+                            }
+                            fullWidth
+                        />
+                    </div>
+                    <div className='col-span-12'>
+                        <TextField
+                            label='Lower Alert Exchange Rate'
+                            variant='outlined'
+                            value={data.lowerExchangeRate}
+                            onChange={event =>
+                                handleChange({name: "lowerExchangeRate", value: event.target.value})
+                            }
+                            fullWidth
+                        />
+                    </div>
+                </>
             )}
             <div className='col-span-12 mt-8 flex justify-end'>
                 <Button
