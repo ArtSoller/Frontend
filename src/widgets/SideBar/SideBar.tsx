@@ -66,6 +66,17 @@ export const SideBar = () => {
             badge: inactiveRulesCount > 0 ? (
                 <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs font-semibold">{inactiveRulesCount}</span>
             ) : undefined
+        },
+        {
+            name: "Exchange Rate Charts from the rules",
+            path: "/workspace/charts",
+            icon: {
+                img: Home.toString(),
+                imgAlt: HomeAlt.toString(),
+                altName: "Exchange Rate Icon",
+                classes: "h-5 w-5"
+            },
+            isSelected: location.pathname === "/workspace/charts"
         }
     ];
 

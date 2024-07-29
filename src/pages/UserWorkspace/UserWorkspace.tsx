@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { SideBar } from "../../widgets/SideBar"
 import { UserListsPage } from "../UserListsPage"
 import { UserFeedPage } from "../UserFeedPage"
+import UserChartsPage from '../UserChartsPage/UserChartsPage'; // Импортируем UserChartsPage
 
 export const UserWorkspace = () => {
     return (
@@ -11,6 +12,7 @@ export const UserWorkspace = () => {
             <Routes>
                 <Route index element={<UserListsPage />} />
                 <Route path='feed' element={<UserFeedPage />} />
+                <Route path='charts' element={<UserChartsPage />} />
             </Routes>
         </div>
     )

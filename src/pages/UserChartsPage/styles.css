@@ -1,0 +1,5 @@
+.chart-container {
+    width: 400px;
+    height: 400px; /* Устанавливаем высоту по желанию */
+    position: relative;
+}
