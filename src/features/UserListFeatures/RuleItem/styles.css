@@ -6,3 +6,12 @@
 .icon-hover:hover {
     opacity: 1;
 }
+
+.interactable {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.interactable:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
