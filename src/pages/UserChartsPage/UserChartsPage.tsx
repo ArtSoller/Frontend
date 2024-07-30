@@ -68,7 +68,7 @@ const UserChartsPage: React.FC = () => {
 
                     const chartData: { [key: number]: any } = {};
                     for (const rule of rulesWithRates) {
-                        chartData[rule.currency.currency_id] = getCurrencyData(rule.currency);
+                        chartData[rule.currency.currency_id] = getCurrencyData(rule.currency, rule);
                     }
                     setCurrencyChartData(chartData);
                 } else {
@@ -83,27 +83,114 @@ const UserChartsPage: React.FC = () => {
         fetchRules();
     }, []);
 
-    const getCurrencyData = (currency: Currency) => {
+    const getCurrencyData = (currency: Currency, rule: Rule) => {
         if (!currency || !currency.rates || currency.rates.length === 0) {
             console.error(`Currency or rates not found for currencyId: ${currency.currency_id}`);
-            return { labels: [], datasets: [] };
+            return { labels: [], datasets: [], options: {} };
         }
 
         const labels = currency.rates.map((_, index) => `Point ${index + 1}`);
         const data = currency.rates;
 
         // Calculate min and max
-        const minRate = Math.min(...data);
-        const maxRate = Math.max(...data);
+        const minRate = Math.min(...data, rule.lower_alert_rate);
+        const maxRate = Math.max(...data, rule.upper_alert_rate);
+        const range = maxRate - minRate;
+
+        // Determine step size based on the range of rates
+        const stepSize = range / 10; // For better visibility, divide the range by 10
+
+        // Calculate moving average
+        const getMovingAverage = (data: number[], windowSize: number): number[] => {
+            let result: number[] = [];
+            for (let i = 0; i < data.length - windowSize + 1; i++) {
+                const windowData = data.slice(i, i + windowSize);
+                const average = windowData.reduce((sum, value) => sum + value, 0) / windowSize;
+                result.push(average);
+            }
+            return result;
+        };
+
+        const movingAverage = getMovingAverage(data, 5); // 5-point moving average
+
+        // Calculate average of moving average
+        const averageMovingAverage = movingAverage.reduce((sum, value) => sum + value, 0) / movingAverage.length;
 
         return {
             labels,
-            datasets: [{
-                label: currency.name,
-                data,
-                borderColor: 'rgba(75,192,192,1)',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-            }],
+            datasets: [
+                {
+                    label: currency.name,
+                    data,
+                    borderColor: 'rgba(129, 152, 198,1)',
+                    backgroundColor: 'rgba(129, 152, 198, 0.2)',
+                },
+                {
+                    label: `${currency.name} (5-point MA)`,
+                    data: new Array(data.length).fill(averageMovingAverage),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderDash: [5, 5],
+                    pointRadius: 0, // Hide points
+                    hidden: true,
+                },
+                {
+                    label: 'Upper Alert Rate',
+                    data: new Array(data.length).fill(rule.upper_alert_rate),
+                    borderColor: 'red',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0, // Hide points
+                    hidden: true,
+                },
+                {
+                    label: 'Lower Alert Rate',
+                    data: new Array(data.length).fill(rule.lower_alert_rate),
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0, // Hide points
+                    hidden: true,
+                },
+            ],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Points',
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Rates',
+                        },
+                        min: minRate - stepSize, // Add padding
+                        max: maxRate + stepSize, // Add padding
+                        ticks: {
+                            stepSize: stepSize, // Set the calculated step size
+                        },
+                    },
+                },
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    },
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            },
         };
     };
 
@@ -121,30 +208,8 @@ const UserChartsPage: React.FC = () => {
                     <h2>{rule.currency.name}</h2>
                     <div className="chart-container"> {/* Контейнер для графика */}
                         <Line
-                            data={currencyChartData[rule.currency.currency_id] || { labels: [], datasets: [] }}
-                            options={{
-                                responsive: true,
-                                maintainAspectRatio: false, // Позволяет изменять размер графика
-                                scales: {
-                                    x: {
-                                        title: {
-                                            display: true,
-                                            text: 'Points'
-                                        },
-                                    },
-                                    y: {
-                                        title: {
-                                            display: true,
-                                            text: 'Rates'
-                                        },
-                                        min: Math.min(...rule.currency.rates) - 0.5, // добавление отступа
-                                        max: Math.max(...rule.currency.rates) + 0.5, // добавление отступа
-                                        ticks: {
-                                            stepSize: 0.25, // Устанавливаем шаг на оси Y
-                                        },
-                                    },
-                                },
-                            }}
+                            data={currencyChartData[rule.currency.currency_id]?.datasets ? currencyChartData[rule.currency.currency_id] : { labels: [], datasets: [] }}
+                            options={currencyChartData[rule.currency.currency_id]?.options || {}}
                         />
                     </div>
                 </div>
