@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserIcon from "../../../shared/media/Profile.svg";
-import { logout } from '../../../shared/services/auth'; // Импорт функции logout
+import { logout } from '../../../shared/services/auth';
+import './styles.css'; // Подключаем файл стилей
 
 export const ProfileFields: React.FC = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const ProfileFields: React.FC = () => {
                     </div>
                     <button
                         onClick={handleLogout}
-                        className='btn btn-primary mt-0'
+                        className='custom-button mt-0'
                     >
                         Log out
                     </button>

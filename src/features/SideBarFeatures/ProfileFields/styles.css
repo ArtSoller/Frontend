@@ -1,0 +1,12 @@
+.custom-button {
+    background-color: #8198C6; /* Цвет фона кнопки */
+    color: #516778; /* Цвет текста на кнопке */
+    border: none; /* Убираем границу, если она есть */
+    padding: 8px 16px; /* Добавляем отступы */
+    border-radius: 4px; /* Скругляем углы */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.custom-button:hover {
+    color: #FFFFFF; /* Цвет текста при наведении */
+}
