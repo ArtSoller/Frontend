@@ -6,7 +6,7 @@ const baseTheme = createTheme({
             main: "#2D3648"
         },
         error: {
-            main: "#FF0000"
+            main: "#2D3648"
         },
         text: {
             primary: "#2D3648",
@@ -39,13 +39,13 @@ export const muiTheme = createTheme({
                         },
                         "&.Mui-error": {
                             "& fieldset": {
-                                borderColor: baseTheme.palette.error.main
+                                borderColor: baseTheme.palette.primary.main
                             },
                             "&:hover fieldset": {
-                                borderColor: baseTheme.palette.error.main
+                                borderColor: baseTheme.palette.primary.main
                             },
                             "&.Mui-focused fieldset": {
-                                borderColor: baseTheme.palette.error.main
+                                borderColor: baseTheme.palette.primary.main
                             }
                         }
                     }
@@ -70,12 +70,12 @@ export const muiTheme = createTheme({
                         opacity: 0.5
                     },
                     "&.Mui-error": {
-                        color: baseTheme.palette.error.main,
+                        color: baseTheme.palette.primary.main,
                         "&.Mui-checked": {
-                            color: baseTheme.palette.error.main
+                            color: baseTheme.palette.primary.main
                         },
                         "&:hover": {
-                            backgroundColor: `rgba(${baseTheme.palette.error.main}, 0.1)`
+                            backgroundColor: `rgba(${baseTheme.palette.primary.main}, 0.1)`
                         }
                     }
                 }
