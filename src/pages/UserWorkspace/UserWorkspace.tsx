@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import { SideBar } from "../../widgets/SideBar"
 import { UserListsPage } from "../UserListsPage"
 import { UserFeedPage } from "../UserFeedPage"
-import UserChartsPage from '../UserChartsPage/UserChartsPage'; // Импортируем UserChartsPage
+import UserChartsPage from '../UserChartsPage/UserChartsPage';
 
 export const UserWorkspace = () => {
     return (

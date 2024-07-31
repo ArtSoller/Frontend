@@ -60,7 +60,7 @@ const UserChartsPage: React.FC = () => {
                         ...rule,
                         currency: {
                             ...rule.currency,
-                            rates: rule.currency.rates || [], // Ensure rates exist
+                            rates: rule.currency.rates || [],
                         },
                     }));
                     setRules(rulesWithRates);
@@ -92,17 +92,14 @@ const UserChartsPage: React.FC = () => {
         const labels = currency.rates.map((_, index) => `Point ${index + 1}`);
         const data = currency.rates;
 
-        // Calculate min and max
         const minRate = Math.min(...data, rule.lower_alert_rate);
         const maxRate = Math.max(...data, rule.upper_alert_rate);
         const range = maxRate - minRate;
 
-        // Determine step size based on the range of rates
-        const stepSize = range / 10; // For better visibility, divide the range by 10
+        const stepSize = range / 10;
 
-        // Calculate moving average
         const getMovingAverage = (data: number[], windowSize: number): number[] => {
-            let result: number[] = [];
+            const result: number[] = [];
             for (let i = 0; i < data.length - windowSize + 1; i++) {
                 const windowData = data.slice(i, i + windowSize);
                 const average = windowData.reduce((sum, value) => sum + value, 0) / windowSize;
@@ -111,7 +108,7 @@ const UserChartsPage: React.FC = () => {
             return result;
         };
 
-        const movingAverage = getMovingAverage(data, 5); // 5-point moving average
+        const movingAverage = getMovingAverage(data, 5);
 
         // Calculate average of moving average
         const averageMovingAverage = movingAverage.reduce((sum, value) => sum + value, 0) / movingAverage.length;
@@ -131,7 +128,7 @@ const UserChartsPage: React.FC = () => {
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderDash: [5, 5],
-                    pointRadius: 0, // Hide points
+                    pointRadius: 0,
                     hidden: true,
                 },
                 {
@@ -140,7 +137,7 @@ const UserChartsPage: React.FC = () => {
                     borderColor: 'red',
                     borderWidth: 2,
                     borderDash: [5, 5],
-                    pointRadius: 0, // Hide points
+                    pointRadius: 0,
                     hidden: true,
                 },
                 {
@@ -149,7 +146,7 @@ const UserChartsPage: React.FC = () => {
                     borderColor: 'blue',
                     borderWidth: 2,
                     borderDash: [5, 5],
-                    pointRadius: 0, // Hide points
+                    pointRadius: 0,
                     hidden: true,
                 },
             ],
@@ -168,10 +165,10 @@ const UserChartsPage: React.FC = () => {
                             display: true,
                             text: 'Rates',
                         },
-                        min: minRate - stepSize, // Add padding
-                        max: maxRate + stepSize, // Add padding
+                        min: minRate - stepSize,
+                        max: maxRate + stepSize,
                         ticks: {
-                            stepSize: stepSize, // Set the calculated step size
+                            stepSize: stepSize,
                         },
                     },
                 },
