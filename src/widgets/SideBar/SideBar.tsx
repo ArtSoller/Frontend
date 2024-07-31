@@ -68,7 +68,7 @@ export const SideBar = () => {
             ) : undefined
         },
         {
-            name: "Exchange Rate Charts from the rules",
+            name: "My Exchange Rate Charts",
             path: "/workspace/charts",
             icon: {
                 img: Home.toString(),
