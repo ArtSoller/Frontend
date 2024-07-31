@@ -179,6 +179,15 @@ const UserChartsPage: React.FC = () => {
                     tooltip: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            label: (tooltipItem: any) => {
+                                let label = `${tooltipItem.dataset.label || ''}: ${tooltipItem.raw.toFixed(2)}`;
+                                const averageRate = tooltipItem.chart.data.datasets[0].data.reduce((sum: number, value: number) => sum + value, 0) / tooltipItem.chart.data.datasets[0].data.length;
+                                const percentageChange = ((tooltipItem.raw - averageRate) / averageRate) * 100;
+                                label += ` (${percentageChange.toFixed(2)}%)`;
+                                return label;
+                            },
+                        },
                     },
                     legend: {
                         display: true,
